@@ -2,7 +2,6 @@
 ///B REVANTH PRASAD
 
 using UnityEngine;
-using UnityEditor;
 
 namespace Empowerlabs.Utils
 {
@@ -21,12 +20,5 @@ namespace Empowerlabs.Utils
 			Debug.Log (builder);
 			#endif
 		}
-	}
-
-
-	public static class AssetPostProcessEditorUtils
-	{
-		public static string TextureAssetPath;
-		public static AssetImporter assetImporter;
 	}
 }
