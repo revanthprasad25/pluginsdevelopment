@@ -32,3 +32,7 @@
 
 	When you import either sprite or texture, by default it will be imported as sprite with mipmaps disabled, planning to create custom import settings
 	Example: Asset Bundle can bet set while importing, Decide whether it should be texture or normal or sprite etc , ..
+
+4.	Folder Specific Inspector
+	
+	Need ideas [Not fully functional]
