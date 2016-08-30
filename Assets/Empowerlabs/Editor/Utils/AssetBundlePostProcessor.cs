@@ -39,19 +39,19 @@ namespace Empowerlabs.Editor
 //			CustomTools.LogMessage (importedAssetString);
 //		}
 
-		private void OnPreprocessTexture ()
-		{
-			TextureImporter m_texImport = (TextureImporter)assetImporter;
-			m_texImport.textureType = TextureImporterType.Sprite;
-			m_texImport.mipmapEnabled = false;
-			m_texImport.anisoLevel = 0;
-			m_texImport.filterMode = FilterMode.Bilinear;
-
-			if (m_texImport.normalmap) 
-			{
-				m_texImport.textureType = TextureImporterType.Bump;
-				m_texImport.grayscaleToAlpha = false;
-			}
-		}
+//		private void OnPreprocessTexture ()
+//		{
+//			TextureImporter m_texImport = (TextureImporter)assetImporter;
+//			m_texImport.textureType = TextureImporterType.Sprite;
+//			m_texImport.mipmapEnabled = false;
+//			m_texImport.anisoLevel = 0;
+//			m_texImport.filterMode = FilterMode.Bilinear;
+//
+//			if (m_texImport.normalmap) 
+//			{
+//				m_texImport.textureType = TextureImporterType.Bump;
+//				m_texImport.grayscaleToAlpha = false;
+//			}
+//		}
 	}
 }

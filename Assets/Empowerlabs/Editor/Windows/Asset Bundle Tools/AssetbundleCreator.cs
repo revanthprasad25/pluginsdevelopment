@@ -18,8 +18,7 @@ namespace Empowerlabs.Editor
 		private static AssetbundleCreator curWindow;
 		private BuildTarget m_buildTarget = BuildTarget.Android;
 		private BuildAssetBundleOptions m_options = BuildAssetBundleOptions.None;
-		private bool m_isAssetFolderCreated;
-		private int m_counter = 0;
+		private GUISkin m_skin;
 		#endregion
 
 	    #region MenuItems
@@ -27,34 +26,54 @@ namespace Empowerlabs.Editor
 		private static void InitWindow()
 	    {
 			curWindow = EditorWindow.GetWindow<AssetbundleCreator> () as AssetbundleCreator;
-			curWindow.minSize = new Vector2(400, 200);
-			curWindow.maxSize = new Vector2(400, 210);
+			curWindow.minSize = new Vector2(400, 300);
+			curWindow.maxSize = new Vector2(400, 300);
 			curWindow.position = new Rect (new Vector2 (Screen.width / 2, Screen.height / 2), new Vector2 (400, 200));
+			curWindow.ShowUtility ();
 
 			GUIContent content = new GUIContent();
+			content.tooltip = "Tool to create Asset Bundle";
 			content.text = "Bundle Creator";
 			curWindow.titleContent = content;
 	    }
 	    #endregion
 
 		#region UnityEngine Methods
+		private void OnEnable()
+		{
+			m_skin = Resources.Load ("Editor Skins/CustomSkin", typeof(GUISkin)) as GUISkin;
+		}
+
+
 		private void OnGUI()
 		{
+			EditorGUILayout.BeginVertical (m_skin.GetStyle("window"));
+
+			EditorGUILayout.LabelField ("Asset Bundle Tool", m_skin.GetStyle ("header"));
+			EditorGUILayout.LabelField ("Tool to create Asset Bundle", m_skin.GetStyle ("tooltip"));
+
 			GUILayout.Space (10);
 
 			EditorGUILayout.BeginVertical ();
+			EditorGUILayout.BeginHorizontal ();
 
+			EditorGUILayout.LabelField ("Bundle Options" , m_skin.GetStyle("label"));
+			m_options = (BuildAssetBundleOptions)EditorGUILayout.EnumPopup ( m_options , m_skin.GetStyle("button"));
+
+			EditorGUILayout.EndHorizontal ();
 			GUILayout.Space (10);
 
-			m_options = (BuildAssetBundleOptions)EditorGUILayout.EnumPopup ("Bundle Options", m_options);
+			EditorGUILayout.BeginHorizontal ();
 
-			GUILayout.Space (10);
+			EditorGUILayout.LabelField ("Build Target" , m_skin.GetStyle("label"));
+			m_buildTarget = (BuildTarget)EditorGUILayout.EnumPopup ( m_buildTarget, m_skin.GetStyle ("button"));
 
-			m_buildTarget = (BuildTarget)EditorGUILayout.EnumPopup ("Build Target", m_buildTarget);
+			EditorGUILayout.EndHorizontal ();
+			EditorGUILayout.EndVertical ();
 
-			GUILayout.Space (20);
+			GUILayout.Space (25);
 
-			if (GUILayout.Button ("Click here to create Bundle folder"))
+			if (GUILayout.Button ("Click here to create Bundle folder" , m_skin.GetStyle("button")))
 			{
 				if (CheckForBundleFolder ()) {
 					if (EditorUtility.DisplayDialog ("Info", "Folder is already created, Do you want to start building", "Build", "Cancel")) {
@@ -69,7 +88,7 @@ namespace Empowerlabs.Editor
 
 			GUILayout.Space (10);
 
-			if (GUILayout.Button ("Build")) 
+			if (GUILayout.Button ("Build" , m_skin.GetStyle("button"))) 
 			{
 				if (EditorUtility.DisplayDialog ("Alert", "Are you sure , you to want to build Asset bundle \nOptions\t:" + m_options.ToString () + "\nTarget\t:" + m_buildTarget.ToString (), "Yes", "No"))
 				{
@@ -78,6 +97,7 @@ namespace Empowerlabs.Editor
 			}
 
 			EditorGUILayout.EndVertical ();
+			Repaint ();
 		}
 		#endregion
 

@@ -19,6 +19,7 @@ namespace Empowerlabs.Editor
 	    private ModulesGUIDsHolder m_guidsHolder;
 	    private string m_moduleName , m_customPath;                                           //Name of the module
 	    private bool m_createResource, m_createScripts, m_createEditor, m_createExampleScene; //Booleans to create folders
+		private GUISkin m_skin;
 	    #endregion
 
 	    #region Menu Items
@@ -26,8 +27,8 @@ namespace Empowerlabs.Editor
 	    private static void InitModuleTool()
 	    {
 	        m_curWindow = EditorWindow.GetWindow<ModuleCreatorWindow>();
-	        m_curWindow.minSize = new Vector2(400, 200);
-	        m_curWindow.maxSize = new Vector2(410, 210);
+			m_curWindow.minSize = new Vector2(400, 350);
+			m_curWindow.maxSize = new Vector2(400, 350);
 	        GUIContent content = new GUIContent();
 	        content.text = "Module Tool";
 	        m_curWindow.titleContent = content;
@@ -35,46 +36,75 @@ namespace Empowerlabs.Editor
 	    #endregion
 
 	    #region Methods 
+
+		private void OnEnable()
+		{
+			m_skin = Resources.Load ("Editor Skins/CustomSkin", typeof(GUISkin)) as GUISkin;
+		}
+
 	    private void OnGUI()
 	    {
-	        GUILayout.Space(10);
-	        EditorGUILayout.BeginVertical();
-	            GUILayout.Space(10);
-	            m_moduleName = EditorGUILayout.TextField("Module Name", m_moduleName);
-	            GUILayout.Space(10);
-	            EditorGUILayout.BeginHorizontal();
-	                if(GUILayout.Button("Select all"))
-	                {
-	                    m_createEditor = m_createExampleScene = m_createResource = m_createScripts = true;
-	                }
-	                GUILayout.Space(5);
-	                if (GUILayout.Button("Select none"))
-	                {
-	                    m_createEditor = m_createExampleScene = m_createResource = m_createScripts = false;
-	                }
-	            EditorGUILayout.EndHorizontal();
-	            GUILayout.Space(10);
-	            EditorGUILayout.BeginHorizontal();
-	                m_createEditor = EditorGUILayout.Toggle("Create Editor", m_createEditor);
-	                GUILayout.Space(5);
-	                m_createResource = EditorGUILayout.Toggle("Create Resource", m_createResource);
-	            EditorGUILayout.EndHorizontal();
-	            GUILayout.Space(10);
-	            EditorGUILayout.BeginHorizontal();
-	                m_createScripts = EditorGUILayout.Toggle("Create Scripts", m_createScripts);
-	                GUILayout.Space(5);
-	                m_createExampleScene = EditorGUILayout.Toggle("Create ExampleScene", m_createExampleScene);
-	            EditorGUILayout.EndHorizontal();
-	            GUILayout.Space(10);
+			EditorGUILayout.BeginVertical(m_skin.GetStyle("window"));
 
-	            if(!System.String.IsNullOrEmpty(m_moduleName))
-	            {
-	                if (GUILayout.Button("Create Module"))
-	                {
-	                    CreateModule();
-	                }
-	            }
+			EditorGUILayout.LabelField ("Module Creator", m_skin.GetStyle ("header"));
+			EditorGUILayout.LabelField ("Tool to create module with required folder sturcture", m_skin.GetStyle ("tooltip"));
+			GUILayout.Space (10);
+
+			EditorGUILayout.BeginHorizontal ();
+			EditorGUILayout.LabelField ("Module Name" , m_skin.GetStyle("label"));
+			m_moduleName = EditorGUILayout.TextField ( m_moduleName , m_skin.GetStyle("textfield"));
+			EditorGUILayout.EndHorizontal ();
+
+			GUILayout.Space (20);
+
+			EditorGUILayout.BeginHorizontal ();
+			if (GUILayout.Button ("Select all" , m_skin.GetStyle("button"))) {
+				m_createEditor = m_createExampleScene = m_createResource = m_createScripts = true;
+			}
+	                GUILayout.Space(5);
+			if (GUILayout.Button ("Select none", m_skin.GetStyle("button"))) {
+				m_createEditor = m_createExampleScene = m_createResource = m_createScripts = false;
+			}
+			EditorGUILayout.EndHorizontal ();
+
+			GUILayout.Space (10);
+
+			EditorGUILayout.BeginHorizontal ();
+			EditorGUILayout.LabelField ("Create Editor" , m_skin.GetStyle("label"));
+			m_createEditor = EditorGUILayout.Toggle ( m_createEditor ,m_skin.GetStyle("toggle"));
+			EditorGUILayout.EndHorizontal ();
+
+			GUILayout.Space (5);
+
+			EditorGUILayout.BeginHorizontal ();
+			EditorGUILayout.LabelField ("Create Resource" , m_skin.GetStyle("label"));
+			m_createResource = EditorGUILayout.Toggle (m_createResource, m_skin.GetStyle ("toggle"));
+			EditorGUILayout.EndHorizontal ();
+
+			GUILayout.Space (5);
+
+			EditorGUILayout.BeginHorizontal ();
+			EditorGUILayout.LabelField ("Create ExampleScene" , m_skin.GetStyle("label"));
+			m_createExampleScene = EditorGUILayout.Toggle (m_createExampleScene, m_skin.GetStyle ("toggle"));
+			EditorGUILayout.EndHorizontal ();
+
+			GUILayout.Space (5);
+
+			EditorGUILayout.BeginHorizontal ();
+			EditorGUILayout.LabelField ("Create Scripts" , m_skin.GetStyle("label"));
+			m_createScripts = EditorGUILayout.Toggle (m_createScripts, m_skin.GetStyle ("toggle"));
+			EditorGUILayout.EndHorizontal ();
+
+			GUILayout.Space (10);
+	        
+			if (!System.String.IsNullOrEmpty (m_moduleName)) {
+				if (GUILayout.Button ("Create Module" , m_skin.GetStyle("button"))) {
+					CreateModule ();
+				}
+			}
 	        EditorGUILayout.EndVertical();
+
+			Repaint ();
 	    }
 
 	    /// <summary>
@@ -130,7 +160,6 @@ namespace Empowerlabs.Editor
 	            AssetDatabase.CreateFolder(AssetDatabase.GUIDToAssetPath(scriptsGuid), "Utils");
 	            AssetDatabase.CreateFolder(AssetDatabase.GUIDToAssetPath(scriptsGuid), "Others");
 	        }
-
 	    }
 	    #endregion
 
